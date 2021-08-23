@@ -1,5 +1,6 @@
 <?php
 
+
 class SiteController extends Controller
 {
 	/**
@@ -137,23 +138,28 @@ class SiteController extends Controller
 	/** Nueva accion para la vista registo
 	 * 
 	*/
-	public function actionRegistro(){
+	public function actionRegistro()
+	{
 		
 		//creo el modelo para el registro
-		$model = new ValidarRegistro;
+		$model = new ValidarRegistro;	
+		
+		$model->sexo = 1;
 
 		//valido si el formulario fue enviado (post)
-		if(isset($_POST["ValidarRegistro"])){
-
+		if(isset($_POST["ValidarRegistro->rules"])){
+			
 			//obtengo el atributo con la propiedad attributes
-			$model->attributes = $_POST["ValidarRegistro"];
+			$model->attributes = $_POST["ValidarRegistro->rules"];
 
 			//verifico si pasa el filtro
-			if(!$model->Validate()){
+			if(!$model->validate()){
 
 				//en caso de error redirecciono enviado
 				$this->redirect($this->createUrl('site/registro'));
 			}
+			//paso los datos de model
+		    $this->render('registro', array('model' => $model));
 		}
 
 		//paso los datos de model

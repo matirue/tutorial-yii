@@ -33,10 +33,70 @@
 
     <div class="row">
         <?php
+            echo $form->labelEx($model, 'apellido');
+            echo $form->textField($model, 'apellido');
+            echo $form->error($model, 'apellido');
+        ?>
+    </div>
+
+    <div class="row">
+        <?php
+            echo $form->labelEx($model, 'sexo');
+            echo $form->radioButtonList(
+                        $model, 
+                        'sexo',                        
+                        array('1' => 'Hombre', '2' => 'Mujer'),
+                        array(
+                            'labelOptions' => array('style'=>'display:inline'),
+                            'separator' => '<br>',
+                            'template' => '{label}: {input}',                    
+                        )
+                    );                        
+        ?>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <?php
+            echo $form->labelEx($model, 'email');
+            echo $form->textField($model, 'email');
+            echo $form->error($model, 'email');
+        ?>
+    </div>
+
+    <div class="row">
+        <?php
+            echo $form->labelEx($model, 'password');
+            echo $form->passwordField($model, 'password');
+            echo $form->error($model, 'password');
+        ?>
+    </div>
+
+    <div class="row">
+        <?php
+            echo $form->labelEx($model, 'confirmar_password');
+            echo $form->passwordField($model, 'confirmar_password');
+            echo $form->error($model, 'confirmar_password');
+        ?>
+    </div>
+
+    <div class="row">
+        <?php
+            echo $form->labelEx($model, 'terminos', array('style' =>'display:inline'));
+            echo $form->checkBox($model, 'terminos');
+            echo $form->error($model, 'terminos');
+        ?>
+    </div>
+
+    <div class="row">
+        <?php
             //butoon
             Echo CHtml::submitButton('Registrarme');
         ?>
     </div>
+
+    
 
     <?php
        //CERRANDO EL WIDGET  

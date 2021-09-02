@@ -3,6 +3,9 @@
 
 class SiteController extends Controller
 {
+	public $layout = "//layouts/main";
+	//public $layout = "//layouts/site"; //defino que layout quiero que arranque
+
 	/**
 	 * Declares class-based actions.
 	 */
@@ -13,6 +16,8 @@ class SiteController extends Controller
 			'captcha'=>array(
 				'class'=>'CCaptchaAction',
 				'backColor'=>0xFFFFFF,
+				'foreColor'=>0xCB2C0A
+
 			),
 			// page action renders "static" pages stored under 'protected/views/site/pages'
 			// They can be accessed via: index.php?r=site/page&view=FileName
@@ -142,15 +147,21 @@ class SiteController extends Controller
 	{
 		
 		//creo el modelo para el registro
-		$model = new ValidarRegistro;	
-		
+		$model = new ValidarRegistro;			
 		$model->sexo = 1;
+		$mensaje = '';
+
+		//valida la exisencia del email
+		if(isset($_POST['ajax']) && $_POST['ajax'] === 'form'){
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
 
 		//valido si el formulario fue enviado (post)
-		if(isset($_POST["ValidarRegistro->rules"])){
+		if(isset($_POST["ValidarRegistro"])){
 			
 			//obtengo el atributo con la propiedad attributes
-			$model->attributes = $_POST["ValidarRegistro->rules"];
+			$model->attributes = $_POST["ValidarRegistro"];
 
 			//verifico si pasa el filtro
 			if(!$model->validate()){
@@ -158,12 +169,43 @@ class SiteController extends Controller
 				//en caso de error redirecciono enviado
 				$this->redirect($this->createUrl('site/registro'));
 			}
-			//paso los datos de model
-		    $this->render('registro', array('model' => $model));
+			else{
+
+				/**Us de la BD */
+				$consulta = new ConsultasBD;
+				
+				$consulta->guardar_usuario(
+								$model->nombre, 
+								$model->apellido, 
+								$model->sexo, 
+								$model->email, 
+								$model->password
+							);
+				
+				//envio el emails
+				$mail = new EnviarEmail; 
+
+				$asunto = utf8_decode('>Confirmar cuenta...'); //utf8_decode: para evitar caracteres sin sentido
+				$mensaje = utf8_decode("Para confirmar su cuenta vaya a la siguiente direccion: " . 
+				    		"<a href='http://localhost/tutorial-yii/index.php?r=site/registro&email=". $model->email .
+							"&codigo_verificacion=" . $consulta->codigo_verificacion ."'>Confirmar cuenta</a>");
+
+				$mail->enviar(
+						array(Yii::app()->params['adminEmail'], Yii::app()->name),
+						array($model->email, $model->nombre),
+						$asunto,
+						$mensaje
+				);
+
+
+				$mensaje = 'Registro con Éxito!';
+
+				$model->unsetAttributes(); //limpio todos los campos en caso de OK
+			}
 		}
 
-		//paso los datos de model
-		$this->render('registro', array('model' => $model));
+		//paso los datos de model y el mesjae a mostrar
+		$this->render('registro', array('model' => $model, 'mensaje' => $mensaje));
 
 	}
 }

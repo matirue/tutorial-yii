@@ -49,5 +49,7 @@ $this->breadcrumbs=array(
 		<?php echo CHtml::submitButton('Login'); ?>
 	</div>
 
+	<a href="/tutorial-yii/site/registro">Registrarme</a>
+
 <?php $this->endWidget(); ?>
 </div><!-- form -->

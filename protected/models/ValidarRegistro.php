@@ -9,6 +9,7 @@
         public $password;  
         public $confirmar_password;
         public $terminos;  
+        public $captcha;
 
         /** Metodo que valida los parametros */
         public function rules(){
@@ -83,6 +84,10 @@
                     'min'=> 8, 'tooShort' => 'Minimo de 8 caracteres',
                     'max'=> 50, 'tooLong' => 'Maximo de 50 caracteres'
                 ),
+                array(
+                    'email',
+                    'Validar_email'
+                ),
 
                 /**Validacion password */
                 array(
@@ -122,8 +127,56 @@
                     'message' => 'Debe aceptar los terminos para continuar'
                 ),
 
+                /** Validacion Captcha */
+                array(
+                    'captcha',
+                    'captcha',
+                    'message' => 'Error, el texto no coincide'                    
+                ),
+
+
 
             );            
+        }
+
+        /**funcion que valida si el email existe o no */
+        public function Validar_email($attribute, $params){
+            /*** 
+            sin bd 
+            $emails = array('matias@matias.com', 'mauro@mauro.com', 'matias@mauro.com');
+
+            foreach($emails as $aux){
+                if($this->email == $aux){
+                    $this->addError('email', 'Este email ya se encuentra registrado');
+                    break;
+                }
+            }
+            */
+
+            $conexion = Yii::app()->db;
+            $consulta = "SELECT email FROM usuarios";
+
+            $resultado = $conexion->createCommand($consulta);
+
+            $aux_emails = $resultado->query();
+
+            foreach($aux_emails as $aux){
+
+                if($this->email === $aux['email']){
+                    
+                    $this->addError('email', 'Este email ya se encuentra registrado');
+                    break;
+                }
+            }
+                     
+        }
+
+        /**Mdoifico los textos de las etiquetas */
+        public function attributeLabels(){
+            return array(
+                'terminos'=> 'Acepto los términos',
+                'captcha'=> 'Introducir el texto que ve en la imagen.'
+            );
         }
         
     }

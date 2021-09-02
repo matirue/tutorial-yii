@@ -20,14 +20,16 @@ return array(
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
-		/*
+		'admin',
+		/*** OCULTAR DESPUES DE USAR
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'Enter Your Password Here',
+			'password'=>'1234',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
-		*/
+		**/
+		
 	),
 
 	// application components
@@ -39,19 +41,38 @@ return array(
 		),
 
 		// uncomment the following to enable URLs in path-format
-		/*
+		/** */
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName' => false, //saco una linea del url, lo aclaro en el .htacces
+			'urlSuffix' => '.html', //agrego un sufijo al final
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
-		*/
+		/***/
 
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
+/*
+		'db'=>array(
+			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
+		),
+
+		'db'=>array(
+			// uncomment the following lines to use a MySQL database
+			
+			'class'=>'CDbConnection'
+			'connectionString' => 'mysql:host=localhost;dbname=tutorial-yii',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'password',
+			'charset' => 'utf8',
+		),
+			*/
+			
 
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -80,6 +101,9 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+		//'adminEmail'=>'webmaster@example.com',
+
+		//configuro la cuenta del administrador
+		'adminEmail'=>'example@example.com',
 	),
 );

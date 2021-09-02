@@ -1,0 +1,1 @@
+<h1>nueva vista del nuevo moulo</h1>
